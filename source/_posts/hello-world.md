@@ -7,7 +7,6 @@ title: 新的开始，新的起点
 你之前可能在[CSDN](https://blog.csdn.net/zeroonet?viewmode=contents)看到过我，鉴于以下原因，博主开始下决心搭建自己的个人博客：
 <!-- more -->
 
-你之前可能在[CSDN](https://blog.csdn.net/zeroonet?viewmode=contents)看到过我，鉴于以下原因，博主开始下决心搭建自己的个人博客：<br>
 - CSDN 上的博客读者必须登录之后才能查看全文；<br>
 - CSDN 的博客主题相比 Hexo 来说，差距有点远，而且这会影响到读者的阅读体验和笔者本人的创作热情；<br>
 - CSDN 时不时弹出一两个广告，让人实在心烦；<br>
