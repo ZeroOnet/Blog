@@ -14,7 +14,8 @@ timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+# 添加个人履历的入口
+url: /
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
