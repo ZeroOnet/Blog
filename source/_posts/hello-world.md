@@ -1,38 +1,15 @@
 ---
-title: Hello World
+title: 新的开始，新的起点
 ---
-Welcome to [Hexo](https://hexo.io/)! `This is your very first post`. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+欢迎来到 ZeroOnet 的个人小站！
 
-## Quick Start
+你之前可能在[CSDN](https://blog.csdn.net/zeroonet?viewmode=contents)看到过我，鉴于以下原因，博主开始下决心搭建自己的个人博客：<br>
+- CSDN 上的博客读者必须登录之后才能查看全文；<br>
+- CSDN 的博客主题相比 Hexo 来说，差距有点远，而且这会影响到读者的阅读体验和笔者本人的创作热情；<br>
+- CSDN 是不是弹出一两个广告，让人实在心烦；<br>
+- CSDN 在线编辑功能有时很坑，即可能导致保存的记录丢失，博主个人就遇到过几次；<br>
+- 个人博客的创作环境更加自由，不需要受第三方平台账户系统的限制，但相应的博文推广途径会受限，这就更考验笔者的功力，能够促使博主写出更优质的文章。<br>
 
-### Create a new post
+对于个人而言，也算是新的起点吧！毕竟临近毕业，近20年的读书生涯即将落下帷幕，一个崭新完整的世界等待我去探索。而这之前，作出一些个人习惯的调整与改变，相信不会是什么坏事......
 
-``` bash
-$ hexo new "My New Post"
-```
-
-More info: [Writing](https://hexo.io/docs/writing.html)
-
-### Run server
-
-``` bash
-$ hexo server
-```
-
-More info: [Server](https://hexo.io/docs/server.html)
-
-### Generate static files
-
-``` bash
-$ hexo generate
-```
-
-More info: [Generating](https://hexo.io/docs/generating.html)
-
-### Deploy to remote sites
-
-``` bash
-$ hexo deploy
-```
-
-More info: [Deployment](https://hexo.io/docs/deployment.html)
+<b>*To be continue, the fighting boy！*</b>
