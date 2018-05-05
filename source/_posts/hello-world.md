@@ -1,7 +1,11 @@
 ---
 title: 新的开始，新的起点
 ---
+
+---
 欢迎来到 ZeroOnet 的个人小站！
+你之前可能在[CSDN](https://blog.csdn.net/zeroonet?viewmode=contents)看到过我，鉴于以下原因，博主开始下决心搭建自己的个人博客：
+<!-- more -->
 
 你之前可能在[CSDN](https://blog.csdn.net/zeroonet?viewmode=contents)看到过我，鉴于以下原因，博主开始下决心搭建自己的个人博客：<br>
 - CSDN 上的博客读者必须登录之后才能查看全文；<br>
