@@ -74,6 +74,19 @@ Nice！很标准的官方代码，那我们看看执行截图的结果吧！....
 
 削微思考下，黑屏的结果不外乎是网页的内存绘图没有获取到任何界面元素，而造成这种现象的原因可能是网页的渲染还没完成。那么我们试着做一下延时处理，结果有所改善，网页的内容能够正确捕捉到。但是带来了一个新的问题，第一次截屏出现莫名的白屏问题，而这个问题在模拟器上没有出现(考虑`Mac`性能优于`iPhone`)。这就很令人捉急了，阅读一些开源框架的实现吧，看看能不能带来一些启发！在`github`上发现两个与之相关的开源库：[SwViewCapture](https://github.com/startry/SwViewCapture)和[DDGScreenShot](https://github.com/dudongge/DDGScreenShot)，有点戏剧性的是这两个库的实现几乎完全一样，甚至是代码在排布上都是一致的，这很有意思！不过究其实现原理，不外乎是对`WKWebView`以屏幕大小分块截图并绘制到内存中，然后截取整个的内容截图，即是最终的网页截图。但是通过测试之后，发现这个分段截图的实现会有很大概率导致截图失败，因此放弃了这个分段截图的策略。细想这开源库的处理过程，本质上是对网页进行两次截图，那如果我们对网页进行两次截图，结果会不会有所不同呢？先看看最终的实现代码：
 ```Swift
+// 不同于 UIWebview，WKWebview 的 didFinish 代理方法是在所有资源加载完毕的情况下调用
+// 通过注入 JS 对象，监听 window.onload 方法，发现 didFinish 方法的调用在其之后，故得此结论
+public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        // WKWebView 截屏的坑点：第一次截屏截取不到网页的任何内容，因此需要二次截屏
+        self.startCaptureWebview { [weak self] _ in
+            self?.startCaptureWebview(completion: { [weak self] (image) in
+                self?.finishLoadingHandler?(image)
+            })
+        }
+    }
+}
+
 /// 对 webview 全部内容进行截屏
 func startCaptureWebview(completion: @escaping (UIImage?) -> Void) {
 //        let originalSize = captureWebview.frame.size
