@@ -118,3 +118,104 @@ func startCaptureWebview(completion: @escaping (UIImage?) -> Void) {
 }
 ```
 结果证明这一猜测是正确的，至少在测试的几十次截图过程中没有发生失败的问题，但是这个代码从实现过程上难有优雅可言，所以仅供参考。如果你有更好的方法，欢迎留言，👏
+
+## 后续：更优雅的方式，`UIWebView`？ 于 2018.8.10 补
+
+`WKWebView`截图的坑以致于`Apple`官方在`iOS 11`推出了专门的`API`，而且还是直接返回的`UIImage`对象，🤣。话不多说，先看下完整代码：
+```Swift
+/// 对 webview 进行截屏的工具类
+public class WebviewCapture: NSObject {
+    
+    fileprivate static let kWebViewRenderFinishedLocationUrlStr = "xxxxxxx"
+    
+    public static let shared: WebviewCapture = WebviewCapture()
+    
+    /// 对 url 所代表的网页链接进行完整截屏
+    ///
+    /// - Parameters:
+    ///   - url: 需要截屏的网页链接
+    ///   - startLoadingHandler: 网页开始加载的回调
+    ///   - failToLoadHandler: 网页加载失败的回调，它将收到一个具体的 NSError 错误信息
+    ///   - finishLoadingHandler: 网页截屏成功的回调，它将收到截屏的结果 UIImage
+    public func captureWebview(url: URL,
+                               startLoadingHandler: @escaping () -> Void,
+                               failToLoadHandler: @escaping (Error) -> Void,
+                               finishLoadingHandler: @escaping (UIImage?) -> Void) {
+        self.startLoadingHandler = startLoadingHandler
+        self.failToLoadHandler = failToLoadHandler
+        self.finishLoadingHandler = finishLoadingHandler
+        
+        captureWebview.loadRequest(URLRequest(url: url))
+    }
+    
+    fileprivate var startLoadingHandler:(() -> Void)?
+    fileprivate var failToLoadHandler: ((Error) -> Void)?
+    fileprivate var finishLoadingHandler: ((UIImage?) -> Void)?
+    
+    /// 用于隐式加载网页并截屏的 webview 实例
+    public lazy var captureWebview: UIWebView = {
+        let result = UIWebView(frame: UIScreen.main.bounds)
+        result.delegate = self
+        return result
+    }()
+}
+
+extension WebviewCapture: UIWebViewDelegate {
+    public func webViewDidStartLoad(_ webView: UIWebView) {
+        startLoadingHandler?()
+    }
+    
+    public func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        failToLoadHandler?(error)
+    }
+    
+    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        if request.url?.absoluteString == BayWebviewCapture.kWebViewRenderFinishedLocationUrlStr {
+            if let scrollHeightStr = webView.stringByEvaluatingJavaScript(from: "document.body.scrollHeight"), let scrollHeight = Int(scrollHeightStr) {
+                webView.scrollView.contentSize.height = CGFloat(scrollHeight)
+                webView.frame.size = webView.scrollView.contentSize
+            }
+            self.finishLoadingHandler?(self.startCaptureWebView())
+            return false
+        } else {
+            return true
+        }
+    }
+}
+
+private extension WebviewCapture {
+    
+    /// 开始对 webview 截屏
+    ///
+    /// - Returns: 截屏的图片结果
+    func startCaptureWebView() -> UIImage? {
+        var result: UIImage?
+        let scrollView = captureWebview.scrollView
+        
+        UIGraphicsBeginImageContextWithOptions(scrollView.contentSize, scrollView.isOpaque, UIScreen.main.scale)
+        scrollView.contentOffset = .zero
+        scrollView.frame = CGRect(origin: .zero, size: scrollView.contentSize)
+        if let context = UIGraphicsGetCurrentContext() {
+            captureWebview.layer.render(in: context)
+        }
+        result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return result
+    }
+}
+```
+既然我们这边不知道网页加载完毕的时机，那我们就让前端来告诉我们，这样我们就可以去掉恶心的延时代码了。那如果你们的前端不配合的话，可以参考以下延时的Y技：(在 `webViewDidFinishLoad` 方法操作)
+```Swift
+DispatchQueue.main.async {
+    if let scrollHeightStr = webView.stringByEvaluatingJavaScript(from: "document.body.scrollHeight"),
+        let scrollHeight = Int(scrollHeightStr) {
+        webView.scrollView.contentSize.height = CGFloat(scrollHeight)
+            webView.frame.size = webView.scrollView.contentSize
+    }
+}
+        
+DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+    // startCaptureWebView()
+}
+```
