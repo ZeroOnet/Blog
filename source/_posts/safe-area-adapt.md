@@ -27,12 +27,12 @@ title: ⌈iOS⌋Safe Area 的适配
 - scrollableAxes: 在可滚动方向上 `adjustedContentInset` = `safeAreaInset` + `contentInset`，在不可滚动方向上 `adjustedContentInset` = `contentInset`。
 - automatic: 如果 `scrollview` 在一个 `automaticallyAdjustsScrollViewContentInset = YES` 的控制器上，并且它被包含在一个 `navigation controller` 中，这种情况下会在 `top & bottom` 上设置  `adjustedContentInset` = `safeAreaInset` + `contentInset` 不管是否滚动。其他情况下与UIScrollViewContentInsetAdjustmentScrollableAxes相同，用一张图概括：
   
-![insetBehavior](../images/safe-area-adapt/scrollBehavior.png)
+![insetBehavior](/images/safe-area-adapt/scrollBehavior.png)
 
 ## 如何使用 Safe Area?
 如果你用的是 IB 搭建的界面，那么你很幸福，将 `Use Safe Area Layout Guides` 打开就可以解决绝大多数问题了。但是，如果你用的是 `xib`，那么不好意思，你可能还需要忙活一阵！我们都知道 `safeAreaLayoutGuide` 是 `top/bottomLayoutGuide` 的替代品，在 iOS 11 一下，IB 会自动将 `safeAreaLayoutGuide` 回退到 `top/bottomLayoutGuide`，但这只对于 `storyboard scene` 有效，我们可以手动测试，将 ``Use Safe Area Layout Guides` 选项关掉，`top/bottomLayoutGuide` 就会出现在控制器对应的 scene 下面， 而 `xib` 描述的是控制器的视图，`top/bottomLayoutGuide` 这个控制器本身的属性自然而然在 iOS 11 之下无法起作用，那么带来的问题是什么呢？我们不妨先来看看，它们是做什么的：
 
-![top/bottom LayoutGuide](../images/safe-area-adapt/top&bottomLayoutGuide.png)
+![top/bottom LayoutGuide](/images/safe-area-adapt/top&bottomLayoutGuide.png)
 
 经过实际项目中辛酸泪发现，如果根视图的子视图顶部约束依赖的是 `safeArea.top`，那么在 iOS 11 一下，`xib` 的这个子视图的顶部约束实际上是相对于屏幕顶部，而非 `UIStatusBar` 的底部，这就导致子视图与 `UIStatusBar` 重叠。 而 `storyboard scene` 中由于 `top/bottom LayoutGuide` 的存在，不会存在此问题，🤷‍♂️ 解决方法就是将这个顶部约束添加 `Outlet`，然后在 iOS 11 一下的设备上手动加上 `UIStatusBar` 的高度 20。也亏的这高度是固定的，不然要整死人，可见这又是一个使用 `storyboard` 而非 `xib` 的理由。
 
