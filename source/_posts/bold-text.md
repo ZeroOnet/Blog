@@ -9,11 +9,11 @@ title: ⌈iOS⌋Bold Text 的坑
 ## iOS：我怎么坑你了？
 首先我们得创建一个 `UIButton`，这个按钮需要设置一张图片，即调用 `setImage(#imageLiteral(resourceName: "imageName"), for: .normal)`。然后在 Simulator 上跑起来，在 Bold Text 生效之前，在 [Reveal](https://revealapp.com) 中，按钮显示效果是这样的：(iOS 12.2)
 
-![image](../images/bold-text/bold-text-before.png)
+![](/images/bold-text/bold-text-before.png)
 
 图片与文本的界限是很清楚，在默认的 `imageEdgeInsets` 和 `titleEdgeInsets` 情况下，图片与文本之间是没有重叠部分的。但是这种“距离美”在 Bold Text 生效之后就变成这样了：
 
-![image](../images/bold-text/bold-text-after.png)
+![](/images/bold-text/bold-text-after.png)
 
 当你测量过前后按钮的宽度后你会发现，Bold Text 生效后按钮会更宽，这是合乎清理的。因为字体都加粗了，肯定需要更大的空间去渲染它，但它却是向两边延伸的。注意，这和 `titleLabel` 的 `textAlignment` 是没有关系的，因为我们这里用的是它的固有尺寸。
 
