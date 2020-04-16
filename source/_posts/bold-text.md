@@ -21,3 +21,6 @@ title: ⌈iOS⌋Bold Text 的坑
 一个简单的思路就是调整 `imageEdgeInsets` 和 `titleEdgeInsets`，如果标题与图片之间不需要 spacing 的话，那么就设置为 0。但是事情不是这么简单，因为 Bold Text 生效之后，出现标题和图片之间重叠的时候，系统依然会认为它们的 spacing 就是 0，因为你事先并没有通过代码去调整 `imageEdgeInsets` 和 `titleEdgeInsets`。所以你还需要累加上一个值：图片与标题重叠区域的某个分量，具体是宽还是高，取决于图片与标题的相对位置，这可以借助博主之前写过的一个简单[UIExtensions](https://github.com/ZeroOnet/UIExtensions)来完成，😄
 
 祝玩得开心！
+
+## 与 2020-04-16 补
+如果你在 iOS 13.x.x 的设备上编写一个小 Demo 来测试 Bold Text 的问题是否有被修复，那么我得很遗憾地说，变得更坑了！之前还只是图片与文字的重叠，但至少都能完整“看出来”，而现在按钮的标题直接被缩略！官方论坛的[这篇文章](https://forums.developer.apple.com/message/392645#392645)里面有对应描述，而[这里](https://github.com/Tencent/QMUI_iOS/commit/2f8dc48b1503836a82fce626583008796214857a)有个临时解决问题的方案，但是这会出现标题超出按钮本身显示区域的问题。目前没有找到更好且有效的解决方案，待续～
