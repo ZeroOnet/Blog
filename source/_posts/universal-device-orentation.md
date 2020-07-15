@@ -70,3 +70,6 @@ open class BaseTabBarController: UITabBarController {
 2. UIViewController
 
 当且仅当两者的交集包含了新屏幕方向的值时，UI 方向才会发生变化。
+
+## 补充
+当工程配置 General -> Deployment Info -> Requires full screen 取消 ☑️ 后，即 App 允许 iPad 分屏，上述屏幕方向的限制在 iPad 上将不再生效，此时 App 会支持所有方向的屏幕旋转！ 
